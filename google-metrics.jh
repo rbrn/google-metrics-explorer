@@ -1,0 +1,18 @@
+entity GoogleProject {
+    name String required unique,
+    googleId String required unique
+}
+
+entity GoogleMetric {
+    name String required unique,
+    description String
+}
+
+relationship OneToMany {
+  GoogleMetric{project(name)} to GoogleProject
+}
+
+dto * with mapstruct
+service * with serviceImpl
+
+

@@ -1,0 +1,16 @@
+version: '2'
+services:
+  gcpmetricsexplorer-mongodb:
+    image: mongo:4.2.3
+    ports:
+      - '27017:27017'
+    command: mongos --configdb gcpmetricsexplorer-mongodb-config
+  gcpmetricsexplorer-mongodb-node:
+    build:
+      context: .
+      dockerfile: mongodb/MongoDB.Dockerfile
+    command: mongod --replSet rs1 --noprealloc --smallfiles
+  gcpmetricsexplorer-mongodb-config:
+    image: mongo:4.2.3
+    container_name: gcpmetricsexplorer-mongodb-config
+    command: mongod --noprealloc --smallfiles --configsvr --dbpath /data/db
