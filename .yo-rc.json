@@ -43,7 +43,7 @@
     "gcpCloudSqlInstanceName": "",
     "gcpCloudSqlUserName": "root",
     "gcpCloudSqlDatabaseName": "GcpMetricsExplorer",
-    "gaeServiceName": "gcp-metrics-explorer",
+    "gaeServiceName": "default",
     "gaeLocation": "europe-west3",
     "gaeInstanceClass": "F2",
     "gaeScalingType": "automatic",
