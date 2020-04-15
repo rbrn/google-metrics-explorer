@@ -3,32 +3,23 @@ package com.db.pwcc.tre.metrics.web.rest;
 import com.db.pwcc.tre.metrics.GcpMetricsExplorerApp;
 import com.db.pwcc.tre.metrics.domain.GoogleMetric;
 import com.db.pwcc.tre.metrics.repository.GoogleMetricRepository;
-import com.db.pwcc.tre.metrics.repository.search.GoogleMetricSearchRepository;
 import com.db.pwcc.tre.metrics.service.GoogleMetricService;
 import com.db.pwcc.tre.metrics.service.dto.GoogleMetricDTO;
 import com.db.pwcc.tre.metrics.service.mapper.GoogleMetricMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.elasticsearch.index.query.QueryBuilders.queryStringQuery;
 import static org.hamcrest.Matchers.hasItem;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -36,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link GoogleMetricResource} REST controller.
  */
 @SpringBootTest(classes = GcpMetricsExplorerApp.class)
-@ExtendWith(MockitoExtension.class)
+
 @AutoConfigureMockMvc
 @WithMockUser
 public class GoogleMetricResourceIT {
@@ -55,14 +46,6 @@ public class GoogleMetricResourceIT {
 
     @Autowired
     private GoogleMetricService googleMetricService;
-
-    /**
-     * This repository is mocked in the com.db.pwcc.tre.metrics.repository.search test package.
-     *
-     * @see com.db.pwcc.tre.metrics.repository.search.GoogleMetricSearchRepositoryMockConfiguration
-     */
-    @Autowired
-    private GoogleMetricSearchRepository mockGoogleMetricSearchRepository;
 
     @Autowired
     private MockMvc restGoogleMetricMockMvc;
@@ -117,9 +100,6 @@ public class GoogleMetricResourceIT {
         GoogleMetric testGoogleMetric = googleMetricList.get(googleMetricList.size() - 1);
         assertThat(testGoogleMetric.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testGoogleMetric.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-
-        // Validate the GoogleMetric in Elasticsearch
-        verify(mockGoogleMetricSearchRepository, times(1)).save(testGoogleMetric);
     }
 
     @Test
@@ -139,9 +119,6 @@ public class GoogleMetricResourceIT {
         // Validate the GoogleMetric in the database
         List<GoogleMetric> googleMetricList = googleMetricRepository.findAll();
         assertThat(googleMetricList).hasSize(databaseSizeBeforeCreate);
-
-        // Validate the GoogleMetric in Elasticsearch
-        verify(mockGoogleMetricSearchRepository, times(0)).save(googleMetric);
     }
 
 
@@ -223,9 +200,6 @@ public class GoogleMetricResourceIT {
         GoogleMetric testGoogleMetric = googleMetricList.get(googleMetricList.size() - 1);
         assertThat(testGoogleMetric.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testGoogleMetric.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-
-        // Validate the GoogleMetric in Elasticsearch
-        verify(mockGoogleMetricSearchRepository, times(1)).save(testGoogleMetric);
     }
 
     @Test
@@ -244,9 +218,6 @@ public class GoogleMetricResourceIT {
         // Validate the GoogleMetric in the database
         List<GoogleMetric> googleMetricList = googleMetricRepository.findAll();
         assertThat(googleMetricList).hasSize(databaseSizeBeforeUpdate);
-
-        // Validate the GoogleMetric in Elasticsearch
-        verify(mockGoogleMetricSearchRepository, times(0)).save(googleMetric);
     }
 
     @Test
@@ -264,23 +235,5 @@ public class GoogleMetricResourceIT {
         // Validate the database contains one less item
         List<GoogleMetric> googleMetricList = googleMetricRepository.findAll();
         assertThat(googleMetricList).hasSize(databaseSizeBeforeDelete - 1);
-
-        // Validate the GoogleMetric in Elasticsearch
-        verify(mockGoogleMetricSearchRepository, times(1)).deleteById(googleMetric.getId());
-    }
-
-    @Test
-    public void searchGoogleMetric() throws Exception {
-        // Initialize the database
-        googleMetricRepository.save(googleMetric);
-        when(mockGoogleMetricSearchRepository.search(queryStringQuery("id:" + googleMetric.getId()), PageRequest.of(0, 20)))
-            .thenReturn(new PageImpl<>(Collections.singletonList(googleMetric), PageRequest.of(0, 1), 1));
-        // Search the googleMetric
-        restGoogleMetricMockMvc.perform(get("/api/_search/google-metrics?query=id:" + googleMetric.getId()))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
-            .andExpect(jsonPath("$.[*].id").value(hasItem(googleMetric.getId())))
-            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
     }
 }

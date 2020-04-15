@@ -1,51 +1,24 @@
 package com.db.pwcc.tre.metrics.config.dbmigrations;
 
-import com.db.pwcc.tre.metrics.domain.*;
-import com.db.pwcc.tre.metrics.repository.GoogleMetricGroupRepository;
-import com.db.pwcc.tre.metrics.repository.GoogleMetricRepository;
-import com.db.pwcc.tre.metrics.repository.search.GoogleMetricGroupSearchRepository;
-import com.db.pwcc.tre.metrics.repository.search.GoogleMetricSearchRepository;
+import com.db.pwcc.tre.metrics.domain.Authority;
+import com.db.pwcc.tre.metrics.domain.GoogleMetric;
+import com.db.pwcc.tre.metrics.domain.GoogleMetricGroup;
+import com.db.pwcc.tre.metrics.domain.User;
 import com.db.pwcc.tre.metrics.security.AuthoritiesConstants;
-
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;
 import com.google.api.MetricDescriptor;
+import com.google.cloud.monitoring.v3.MetricServiceClient;
+import com.google.cloud.monitoring.v3.MetricServiceClient.ListMetricDescriptorsPagedResponse;
+import com.google.monitoring.v3.ListMetricDescriptorsRequest;
+import com.google.monitoring.v3.ProjectName;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
-
-import com.google.api.LabelDescriptor;
-import com.google.api.Metric;
-import com.google.api.MetricDescriptor;
-import com.google.api.MonitoredResource;
-import com.google.api.MonitoredResourceDescriptor;
-import com.google.cloud.monitoring.v3.MetricServiceClient;
-import com.google.cloud.monitoring.v3.MetricServiceClient.ListMetricDescriptorsPagedResponse;
-import com.google.cloud.monitoring.v3.MetricServiceClient.ListMonitoredResourceDescriptorsPagedResponse;
-import com.google.cloud.monitoring.v3.MetricServiceClient.ListTimeSeriesPagedResponse;
-import com.google.gson.Gson;
-import com.google.monitoring.v3.Aggregation;
-import com.google.monitoring.v3.CreateMetricDescriptorRequest;
-import com.google.monitoring.v3.CreateTimeSeriesRequest;
-import com.google.monitoring.v3.ListMetricDescriptorsRequest;
-import com.google.monitoring.v3.ListMonitoredResourceDescriptorsRequest;
-import com.google.monitoring.v3.ListTimeSeriesRequest;
-import com.google.monitoring.v3.MetricDescriptorName;
-import com.google.monitoring.v3.MonitoredResourceDescriptorName;
-import com.google.monitoring.v3.Point;
-import com.google.monitoring.v3.ProjectName;
-import com.google.monitoring.v3.TimeInterval;
-import com.google.monitoring.v3.TimeSeries;
-import com.google.monitoring.v3.TypedValue;
-import com.google.protobuf.Duration;
-import com.google.protobuf.util.Timestamps;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 
 import static java.util.Arrays.asList;
 
@@ -158,17 +131,6 @@ public class InitialSetupMigration {
                 System.out.println(d.getName() + " excluded");
             }
         }
-    }
-
-    @ChangeSet(order = "05", author = "initiator", id = "05-addSearch")
-    public void addSearch(GoogleMetricSearchRepository googleMetricSearchRepository, GoogleMetricRepository googleMetricRepository, GoogleMetricGroupRepository googleMetricGroupRepository,
-                          GoogleMetricGroupSearchRepository googleMetricGroupSearchRepository) throws IOException {
-        googleMetricGroupRepository.findAll()
-            .forEach(googleMetricGroup -> googleMetricGroupSearchRepository.save(googleMetricGroup));
-
-        googleMetricRepository.findAll()
-            .forEach(googleMetric -> googleMetricSearchRepository.save(googleMetric));
-
     }
 
     private GoogleMetricGroup getMetricGroup(MetricDescriptor metricDescriptor, MongoTemplate mongoTemplate) {

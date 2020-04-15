@@ -2,20 +2,17 @@ package com.db.pwcc.tre.metrics.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import javax.validation.constraints.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A GoogleMetric.
  */
 @Document(collection = "google_metric")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "googlemetric")
 public class GoogleMetric implements Serializable {
 
     private static final long serialVersionUID = 1L;

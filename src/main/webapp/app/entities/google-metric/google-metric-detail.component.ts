@@ -24,6 +24,7 @@ export class GoogleMetricDetailComponent implements OnInit {
   height = 400;
   type = 'LineChart';
   data: any;
+
   constructor(protected activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {

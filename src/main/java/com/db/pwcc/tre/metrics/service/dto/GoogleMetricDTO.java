@@ -1,9 +1,6 @@
 package com.db.pwcc.tre.metrics.service.dto;
 
-import com.db.pwcc.tre.metrics.domain.GoogleMetric;
-import com.db.pwcc.tre.metrics.web.rest.GoogleMetricCustomService;
 import com.db.pwcc.tre.metrics.web.rest.TimeSeriesPoint;
-import com.google.monitoring.v3.Point;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -11,7 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * A DTO for the {@link GoogleMetric} entity.
+ * A DTO for the {@link com.db.pwcc.tre.metrics.domain.GoogleMetric} entity.
  */
 public class GoogleMetricDTO implements Serializable {
 

@@ -25,9 +25,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.db.pwcc.tre.metrics.domain.GoogleMetric}.
@@ -99,7 +96,6 @@ public class GoogleMetricResource {
     public ResponseEntity<List<GoogleMetricDTO>> getAllGoogleMetrics(Pageable pageable) {
         log.debug("REST request to get a page of GoogleMetrics");
         Page<GoogleMetricDTO> page = googleMetricService.findAll(pageable);
-
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
@@ -132,21 +128,5 @@ public class GoogleMetricResource {
         log.debug("REST request to delete GoogleMetric : {}", id);
         googleMetricService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/google-metrics?query=:query} : search for the googleMetric corresponding
-     * to the query.
-     *
-     * @param query the query of the googleMetric search.
-     * @param pageable the pagination information.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/google-metrics")
-    public ResponseEntity<List<GoogleMetricDTO>> searchGoogleMetrics(@RequestParam String query, Pageable pageable) {
-        log.debug("REST request to search for a page of GoogleMetrics for query {}", query);
-        Page<GoogleMetricDTO> page = googleMetricService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 }

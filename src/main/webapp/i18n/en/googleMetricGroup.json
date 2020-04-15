@@ -5,7 +5,6 @@
         "title": "Google Metric Groups",
         "createLabel": "Create a new Google Metric Group",
         "createOrEditLabel": "Create or edit a Google Metric Group",
-        "search": "Search for Google Metric Group",
         "notFound": "No Google Metric Groups found"
       },
       "created": "A new Google Metric Group is created with identifier {{ param }}",

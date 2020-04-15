@@ -23,9 +23,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * REST controller for managing {@link com.db.pwcc.tre.metrics.domain.GoogleMetricGroup}.
@@ -125,21 +122,5 @@ public class GoogleMetricGroupResource {
         log.debug("REST request to delete GoogleMetricGroup : {}", id);
         googleMetricGroupService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id)).build();
-    }
-
-    /**
-     * {@code SEARCH  /_search/google-metric-groups?query=:query} : search for the googleMetricGroup corresponding
-     * to the query.
-     *
-     * @param query the query of the googleMetricGroup search.
-     * @param pageable the pagination information.
-     * @return the result of the search.
-     */
-    @GetMapping("/_search/google-metric-groups")
-    public ResponseEntity<List<GoogleMetricGroupDTO>> searchGoogleMetricGroups(@RequestParam String query, Pageable pageable) {
-        log.debug("REST request to search for a page of GoogleMetricGroups for query {}", query);
-        Page<GoogleMetricGroupDTO> page = googleMetricGroupService.search(query, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 }

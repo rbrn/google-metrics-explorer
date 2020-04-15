@@ -3,7 +3,6 @@ package com.db.pwcc.tre.metrics.service.impl;
 import com.db.pwcc.tre.metrics.service.GoogleMetricService;
 import com.db.pwcc.tre.metrics.domain.GoogleMetric;
 import com.db.pwcc.tre.metrics.repository.GoogleMetricRepository;
-import com.db.pwcc.tre.metrics.repository.search.GoogleMetricSearchRepository;
 import com.db.pwcc.tre.metrics.service.dto.GoogleMetricDTO;
 import com.db.pwcc.tre.metrics.service.mapper.GoogleMetricMapper;
 import org.slf4j.Logger;
@@ -14,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
-import static org.elasticsearch.index.query.QueryBuilders.*;
 
 /**
  * Service Implementation for managing {@link GoogleMetric}.
@@ -29,12 +26,9 @@ public class GoogleMetricServiceImpl implements GoogleMetricService {
 
     private final GoogleMetricMapper googleMetricMapper;
 
-    private final GoogleMetricSearchRepository googleMetricSearchRepository;
-
-    public GoogleMetricServiceImpl(GoogleMetricRepository googleMetricRepository, GoogleMetricMapper googleMetricMapper, GoogleMetricSearchRepository googleMetricSearchRepository) {
+    public GoogleMetricServiceImpl(GoogleMetricRepository googleMetricRepository, GoogleMetricMapper googleMetricMapper) {
         this.googleMetricRepository = googleMetricRepository;
         this.googleMetricMapper = googleMetricMapper;
-        this.googleMetricSearchRepository = googleMetricSearchRepository;
     }
 
     /**
@@ -48,9 +42,7 @@ public class GoogleMetricServiceImpl implements GoogleMetricService {
         log.debug("Request to save GoogleMetric : {}", googleMetricDTO);
         GoogleMetric googleMetric = googleMetricMapper.toEntity(googleMetricDTO);
         googleMetric = googleMetricRepository.save(googleMetric);
-        GoogleMetricDTO result = googleMetricMapper.toDto(googleMetric);
-        googleMetricSearchRepository.save(googleMetric);
-        return result;
+        return googleMetricMapper.toDto(googleMetric);
     }
 
     /**
@@ -88,20 +80,5 @@ public class GoogleMetricServiceImpl implements GoogleMetricService {
     public void delete(String id) {
         log.debug("Request to delete GoogleMetric : {}", id);
         googleMetricRepository.deleteById(id);
-        googleMetricSearchRepository.deleteById(id);
-    }
-
-    /**
-     * Search for the googleMetric corresponding to the query.
-     *
-     * @param query the query of the search.
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    @Override
-    public Page<GoogleMetricDTO> search(String query, Pageable pageable) {
-        log.debug("Request to search for a page of GoogleMetrics for query {}", query);
-        return googleMetricSearchRepository.search(queryStringQuery(query), pageable)
-            .map(googleMetricMapper::toDto);
     }
 }

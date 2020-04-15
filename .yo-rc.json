@@ -17,7 +17,7 @@
     "databaseType": "mongodb",
     "devDatabaseType": "mongodb",
     "prodDatabaseType": "mongodb",
-    "searchEngine": false,
+    "searchEngine": "false",
     "messageBroker": false,
     "serviceDiscoveryType": false,
     "buildTool": "maven",
@@ -38,6 +38,17 @@
     "enableTranslation": true,
     "nativeLanguage": "en",
     "languages": ["en"],
-    "blueprints": []
+    "blueprints": [],
+    "gcpProjectId": "dev1-onb-dbhc-monitoring-e561",
+    "gcpCloudSqlInstanceName": "",
+    "gcpCloudSqlUserName": "root",
+    "gcpCloudSqlDatabaseName": "GcpMetricsExplorer",
+    "gaeServiceName": "gcp-metrics-explorer",
+    "gaeLocation": "europe-west3",
+    "gaeInstanceClass": "F2",
+    "gaeScalingType": "automatic",
+    "gaeMinInstances": "0",
+    "gaeMaxInstances": "0",
+    "gaeCloudSQLInstanceNeeded": "N"
   }
 }

@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import javax.validation.constraints.*;
 
-import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.HashSet;
@@ -16,7 +15,6 @@ import java.util.Set;
  * A GoogleMetricGroup.
  */
 @Document(collection = "google_metric_group")
-@org.springframework.data.elasticsearch.annotations.Document(indexName = "googlemetricgroup")
 public class GoogleMetricGroup implements Serializable {
 
     private static final long serialVersionUID = 1L;

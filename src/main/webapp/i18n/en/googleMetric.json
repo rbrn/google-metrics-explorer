@@ -5,7 +5,6 @@
         "title": "Google Metrics",
         "createLabel": "Create a new Google Metric",
         "createOrEditLabel": "Create or edit a Google Metric",
-        "search": "Search for Google Metric",
         "notFound": "No Google Metrics found"
       },
       "created": "A new Google Metric is created with identifier {{ param }}",
