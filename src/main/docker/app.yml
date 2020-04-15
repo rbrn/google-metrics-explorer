@@ -9,9 +9,15 @@ services:
       - SPRING_DATA_MONGODB_URI=mongodb://gcpmetricsexplorer-mongodb:27017
       - SPRING_DATA_MONGODB_DATABASE=GcpMetricsExplorer
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
+      - SPRING_DATA_JEST_URI=http://gcpmetricsexplorer-elasticsearch:9200
+      - SPRING_ELASTICSEARCH_REST_URIS=http://gcpmetricsexplorer-elasticsearch:9200
     ports:
       - 8080:8080
   gcpmetricsexplorer-mongodb:
     extends:
       file: mongodb.yml
       service: gcpmetricsexplorer-mongodb
+  gcpmetricsexplorer-elasticsearch:
+    extends:
+      file: elasticsearch.yml
+      service: gcpmetricsexplorer-elasticsearch

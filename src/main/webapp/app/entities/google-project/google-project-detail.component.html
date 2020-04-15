@@ -1,0 +1,40 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="googleProject">
+            <h2><span jhiTranslate="gcpMetricsExplorerApp.googleProject.detail.title">Google Project</span> {{ googleProject.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="gcpMetricsExplorerApp.googleProject.name">Name</span></dt>
+                <dd>
+                    <span>{{ googleProject.name }}</span>
+                </dd>
+                <dt><span jhiTranslate="gcpMetricsExplorerApp.googleProject.googleId">Google Id</span></dt>
+                <dd>
+                    <span>{{ googleProject.googleId }}</span>
+                </dd>
+                <dt><span jhiTranslate="gcpMetricsExplorerApp.googleProject.googleMetric">Google Metric</span></dt>
+                <dd>
+                    <div *ngIf="googleProject.googleMetricId">
+                        <a [routerLink]="['/google-metric', googleProject.googleMetricId, 'view']">{{ googleProject.googleMetricId }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/google-project', googleProject.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

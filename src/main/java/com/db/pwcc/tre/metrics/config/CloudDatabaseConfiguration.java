@@ -1,17 +1,20 @@
 package com.db.pwcc.tre.metrics.config;
 
-import com.github.mongobee.Mongobee;
-
+import com.github.cloudyrock.mongock.SpringBootMongock;
+import com.github.cloudyrock.mongock.SpringBootMongockBuilder;
+import com.mongodb.MongoClient;
 import io.github.jhipster.config.JHipsterConstants;
 import io.github.jhipster.domain.util.JSR310DateConverters.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.cloud.Cloud;
 import org.springframework.cloud.CloudException;
 import org.springframework.cloud.config.java.AbstractCloudConfig;
 import org.springframework.cloud.service.ServiceInfo;
 import org.springframework.cloud.service.common.MongoServiceInfo;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mongodb.MongoDbFactory;
@@ -57,21 +60,10 @@ public class CloudDatabaseConfiguration extends AbstractCloudConfig {
     }
 
     @Bean
-    public Mongobee mongobee(MongoDbFactory mongoDbFactory, MongoTemplate mongoTemplate, Cloud cloud) {
-        log.debug("Configuring Cloud Mongobee");
-        List<ServiceInfo> matchingServiceInfos = cloud.getServiceInfos(MongoDbFactory.class);
-
-        if (matchingServiceInfos.size() != 1) {
-            throw new CloudException("No unique service matching MongoDbFactory found. Expected 1, found "
-                + matchingServiceInfos.size());
-        }
-        MongoServiceInfo info = (MongoServiceInfo) matchingServiceInfos.get(0);
-        Mongobee mongobee = new Mongobee(info.getUri());
-        mongobee.setDbName(mongoDbFactory.getDb().getName());
-        mongobee.setMongoTemplate(mongoTemplate);
-        // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("com.db.pwcc.tre.metrics.config.dbmigrations");
-        mongobee.setEnabled(true);
-        return mongobee;
+    public SpringBootMongock mongock(ApplicationContext springContext, MongoClient mongoClient, MongoProperties mongoProperties) {
+        return new SpringBootMongockBuilder(mongoClient, mongoProperties.getDatabase(), "com.db.pwcc.tre.metrics.config.dbmigrations")
+            .setApplicationContext(springContext)
+            .setLockQuickConfig()
+            .build();
     }
 }

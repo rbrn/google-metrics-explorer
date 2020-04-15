@@ -1,0 +1,25 @@
+{
+  "gcpMetricsExplorerApp": {
+    "googleMetricGroup": {
+      "home": {
+        "title": "Google Metric Groups",
+        "createLabel": "Create a new Google Metric Group",
+        "createOrEditLabel": "Create or edit a Google Metric Group",
+        "search": "Search for Google Metric Group",
+        "notFound": "No Google Metric Groups found"
+      },
+      "created": "A new Google Metric Group is created with identifier {{ param }}",
+      "updated": "A Google Metric Group is updated with identifier {{ param }}",
+      "deleted": "A Google Metric Group is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Google Metric Group {{ id }}?"
+      },
+      "detail": {
+        "title": "Google Metric Group"
+      },
+      "name": "Name",
+      "googleId": "Google Id",
+      "googleMetric": "Google Metric"
+    }
+  }
+}

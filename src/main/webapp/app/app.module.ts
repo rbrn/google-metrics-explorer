@@ -8,6 +8,7 @@ import { GcpMetricsExplorerAppRoutingModule } from './app-routing.module';
 import { GcpMetricsExplorerHomeModule } from './home/home.module';
 import { GcpMetricsExplorerEntityModule } from './entities/entity.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
+import { GoogleChartsModule } from 'angular-google-charts';
 import { MainComponent } from './layouts/main/main.component';
 import { NavbarComponent } from './layouts/navbar/navbar.component';
 import { FooterComponent } from './layouts/footer/footer.component';
@@ -23,7 +24,8 @@ import { ErrorComponent } from './layouts/error/error.component';
     GcpMetricsExplorerHomeModule,
     // jhipster-needle-angular-add-module JHipster will add new module here
     GcpMetricsExplorerEntityModule,
-    GcpMetricsExplorerAppRoutingModule
+    GcpMetricsExplorerAppRoutingModule,
+    GoogleChartsModule
   ],
   declarations: [MainComponent, NavbarComponent, ErrorComponent, PageRibbonComponent, ActiveMenuDirective, FooterComponent],
   bootstrap: [MainComponent]

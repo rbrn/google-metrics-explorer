@@ -1,5 +1,8 @@
 package com.db.pwcc.tre.metrics.config;
 
+import com.github.cloudyrock.mongock.SpringBootMongock;
+import com.github.cloudyrock.mongock.SpringBootMongockBuilder;
+import com.mongodb.MongoClient;
 import io.github.jhipster.config.JHipsterConstants;
 import com.github.mongobee.Mongobee;
 import com.mongodb.MongoClient;
@@ -9,15 +12,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.annotation.ComponentScan.Filter;
+import org.springframework.context.annotation.FilterType;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
 import org.springframework.data.mongodb.core.mapping.event.ValidatingMongoEventListener;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
 
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -25,7 +33,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
-@EnableMongoRepositories("com.db.pwcc.tre.metrics.repository")
+@EnableElasticsearchRepositories("com.db.pwcc.tre.metrics.repository.search")
+@EnableMongoRepositories(basePackages = "com.db.pwcc.tre.metrics.repository", includeFilters = @Filter(type = FilterType.ASSIGNABLE_TYPE, value = MongoRepository.class))
 @Profile("!" + JHipsterConstants.SPRING_PROFILE_CLOUD)
 @Import(value = MongoAutoConfiguration.class)
 @EnableMongoAuditing(auditorAwareRef = "springSecurityAuditorAware")
@@ -52,13 +61,11 @@ public class DatabaseConfiguration {
     }
 
     @Bean
-    public Mongobee mongobee(MongoClient mongoClient, MongoTemplate mongoTemplate, MongoProperties mongoProperties) {
-        log.debug("Configuring Mongobee");
-        Mongobee mongobee = new Mongobee(mongoClient);
-        mongobee.setDbName(mongoProperties.getMongoClientDatabase());
-        mongobee.setMongoTemplate(mongoTemplate);
-        // package to scan for migrations
-        mongobee.setChangeLogsScanPackage("com.db.pwcc.tre.metrics.config.dbmigrations");
-        mongobee.setEnabled(true);
-        return mongobee;
-    }}
+    public SpringBootMongock mongock(ApplicationContext springContext, MongoClient mongoClient, MongoProperties mongoProperties) {
+        return new SpringBootMongockBuilder(mongoClient, mongoProperties.getDatabase(), "com.db.pwcc.tre.metrics.config.dbmigrations")
+            .setApplicationContext(springContext)
+            .setLockQuickConfig()
+            .build();
+    }
+
+}

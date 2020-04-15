@@ -24,6 +24,10 @@ spring:
       host: localhost
       port: 0
       database: GcpMetricsExplorer
+    elasticsearch:
+      properties:
+        path:
+          home: target/elasticsearch
   mail:
     host: localhost
   main:

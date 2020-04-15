@@ -1,4 +1,4 @@
-entity GoogleProject {
+entity GoogleMetricGroup{
     name String required unique,
     googleId String required unique
 }
@@ -9,10 +9,9 @@ entity GoogleMetric {
 }
 
 relationship OneToMany {
-  GoogleMetric{project(name)} to GoogleProject
+   GoogleMetricGroup to GoogleMetric{metricGroup(name)}
 }
 
 dto * with mapstruct
 service * with serviceImpl
-
-
+paginate * with infinite-scroll

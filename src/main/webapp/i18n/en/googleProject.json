@@ -1,0 +1,24 @@
+{
+  "gcpMetricsExplorerApp": {
+    "googleProject": {
+      "home": {
+        "title": "Google Projects",
+        "createLabel": "Create a new Google Project",
+        "createOrEditLabel": "Create or edit a Google Project",
+        "notFound": "No Google Projects found"
+      },
+      "created": "A new Google Project is created with identifier {{ param }}",
+      "updated": "A Google Project is updated with identifier {{ param }}",
+      "deleted": "A Google Project is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Google Project {{ id }}?"
+      },
+      "detail": {
+        "title": "Google Project"
+      },
+      "name": "Name",
+      "googleId": "Google Id",
+      "googleMetric": "Google Metric"
+    }
+  }
+}

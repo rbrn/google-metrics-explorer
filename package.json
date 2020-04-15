@@ -22,6 +22,7 @@
     "@ng-bootstrap/ng-bootstrap": "6.0.0",
     "@ngx-translate/core": "11.0.1",
     "@ngx-translate/http-loader": "4.0.0",
+    "angular-google-charts": "^0.1.6",
     "bootstrap": "4.4.1",
     "bootswatch": "4.4.1",
     "moment": "2.24.0",
@@ -117,7 +118,7 @@
     "webpack:prod:main": "npm run webpack -- --config webpack/webpack.prod.js --profile",
     "webpack:prod": "npm run cleanup && npm run webpack:prod:main && npm run clean-www",
     "webpack:test": "npm run test",
-    "webpack-dev-server": "node --max_old_space_size=4096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "webpack-dev-server": "node --max_old_space_size=2096 node_modules/webpack-dev-server/bin/webpack-dev-server.js",
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "jestSonar": {

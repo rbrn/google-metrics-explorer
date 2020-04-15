@@ -3,6 +3,7 @@ package com.db.pwcc.tre.metrics.service;
 import com.db.pwcc.tre.metrics.GcpMetricsExplorerApp;
 import com.db.pwcc.tre.metrics.config.Constants;
 import com.db.pwcc.tre.metrics.domain.User;
+import com.db.pwcc.tre.metrics.repository.search.UserSearchRepository;
 import com.db.pwcc.tre.metrics.repository.UserRepository;
 import com.db.pwcc.tre.metrics.service.dto.UserDTO;
 
@@ -21,6 +22,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 
 /**
  * Integration tests for {@link UserService}.
@@ -45,6 +49,14 @@ public class UserServiceIT {
 
     @Autowired
     private UserService userService;
+
+    /**
+     * This repository is mocked in the com.db.pwcc.tre.metrics.repository.search test package.
+     *
+     * @see com.db.pwcc.tre.metrics.repository.search.UserSearchRepositoryMockConfiguration
+     */
+    @Autowired
+    private UserSearchRepository mockUserSearchRepository;
 
     private User user;
 
@@ -144,6 +156,9 @@ public class UserServiceIT {
         userService.removeNotActivatedUsers();
         users = userRepository.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(now.minus(3, ChronoUnit.DAYS));
         assertThat(users).isEmpty();
+
+        // Verify Elasticsearch mock
+        verify(mockUserSearchRepository, times(1)).delete(user);
     }
 
     @Test
@@ -158,6 +173,9 @@ public class UserServiceIT {
         userService.removeNotActivatedUsers();
         Optional<User> maybeDbUser = userRepository.findById(dbUser.getId());
         assertThat(maybeDbUser).contains(dbUser);
+
+        // Verify Elasticsearch mock
+        verify(mockUserSearchRepository, never()).delete(user);
     }
 
     @Test

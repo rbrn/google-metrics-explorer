@@ -15,9 +15,15 @@
 
 logging:
   level:
-    ROOT: DEBUG
-    io.github.jhipster: DEBUG
-    com.db.pwcc.tre.metrics: DEBUG
+    ROOT: WARN
+    io.github.jhipster: info
+    com.db.pwcc.tre.metrics: debug
+    com.google.monitoring: debug
+
+management:
+  health:
+    elasticsearch:
+      enabled: false
 
 spring:
   profiles:
@@ -37,8 +43,12 @@ spring:
       indent-output: true
   data:
     mongodb:
-      uri: mongodb://localhost:27017
-      database: GcpMetricsExplorer
+      uri: mongodb+srv://crown_user:ZH57aGbNNRu2wKs@cluster0-eagup.azure.mongodb.net/gcpmetrics?retryWrites=true&w=majority
+      database: gcpmetrics
+    elasticsearch:
+      properties:
+        path:
+          home: target/elasticsearch
   mail:
     host: localhost
     port: 25

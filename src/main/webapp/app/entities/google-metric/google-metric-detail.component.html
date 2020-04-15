@@ -1,0 +1,53 @@
+<div class="row justify-content-center">
+
+    <div class="col-8">
+        <h2><span>Past 20 min for {{googleMetric.name.toUpperCase()}}}</span> {{ googleMetric.id }}
+        </h2>
+        <google-chart [width]="width" [height]="height"
+                      [columnNames]="columnNames"
+                      [type]="type"
+                      [data]="data"
+        >
+        </google-chart>
+    </div>
+    <div class="col-8">
+        <div *ngIf="googleMetric">
+            <h2><span
+                jhiTranslate="gcpMetricsExplorerApp.googleMetric.detail.title">Google Metric</span> {{ googleMetric.id }}
+            </h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="gcpMetricsExplorerApp.googleMetric.name">Name</span></dt>
+                <dd>
+                    <span>{{ googleMetric.name }}</span>
+                </dd>
+                <dt><span jhiTranslate="gcpMetricsExplorerApp.googleMetric.description">Description</span></dt>
+                <dd>
+                    <span>{{ googleMetric.description }}</span>
+                </dd>
+                <dt><span jhiTranslate="gcpMetricsExplorerApp.googleMetric.metricGroup">Metric Group</span></dt>
+                <dd>
+                    <div *ngIf="googleMetric.metricGroupId">
+                        <a [routerLink]="['/google-metric-group', googleMetric.metricGroupId, 'view']">{{ googleMetric.metricGroupName }}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/google-metric', googleMetric.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+    </div>
