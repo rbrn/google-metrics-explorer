@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { IGoogleMetric } from 'app/shared/model/google-metric.model';
-import any = jasmine.any;
 
 @Component({
   selector: 'jhi-google-metric-detail',

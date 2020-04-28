@@ -120,16 +120,16 @@ public class InitialSetupMigration {
 
         for (MetricDescriptor d : response.iterateAll()) {
             GoogleMetricGroup googleMetricGroup = getMetricGroup(d, mongoTemplate);
-            if (groups.contains(googleMetricGroup.getName())) {
+            //if (groups.contains(googleMetricGroup.getName())) {
                 System.out.println(d.getName() + " " + d.getDisplayName());
                 GoogleMetric metric = new GoogleMetric();
                 metric.setName(d.getType());
                 metric.setDescription(d.getDescription());
                 metric.setMetricGroup(googleMetricGroup);
                 mongoTemplate.save(metric);
-            } else {
-                System.out.println(d.getName() + " excluded");
-            }
+            //} else {
+              //  System.out.println(d.getName() + " excluded");
+           // }
         }
     }
 

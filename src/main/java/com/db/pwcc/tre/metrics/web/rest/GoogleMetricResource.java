@@ -100,6 +100,19 @@ public class GoogleMetricResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    /**
+     * {@code GET  /google-metrics} : get all the googleMetrics.
+     *
+     * @param groupName the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of googleMetrics in body.
+     */
+    @GetMapping("/google-metrics/by-group/{groupName}")
+    public ResponseEntity<List<GoogleMetricDTO>> getAllGoogleMetrics(@PathVariable String  groupName) {
+        log.debug("REST request to get a page of GoogleMetrics");
+        List<GoogleMetricDTO> page = googleMetricService.findByName(groupName);
+        return ResponseEntity.ok().body(page);
+    }
+
 
     @Autowired
     private GoogleMetricCustomService googleMetricCustomService;

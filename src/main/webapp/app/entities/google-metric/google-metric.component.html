@@ -17,7 +17,20 @@
     <div class="alert alert-warning" id="no-result" *ngIf="googleMetrics?.length === 0">
         <span jhiTranslate="gcpMetricsExplorerApp.googleMetric.home.notFound">No googleMetrics found</span>
     </div>
+    <div style="width: 200px;">
+        <form name="editForm" role="form" novalidate [formGroup]="editForm">
+              <div>
+                  <div class="form-group">
+                      <label class="form-control-label" jhiTranslate="gcpMetricsExplorerApp.googleMetric.metricGroup" for="field_metricGroup">Metric Group</label>
+                      <select class="form-control" id="field_metricGroup" name="metricGroup" formControlName="metricGroupId" (ngModelChange)="filter()">
+                          <option [ngValue]="null"></option>
+                          <option [ngValue]="googleMetricGroupOption.id" *ngFor="let googleMetricGroupOption of googlemetricgroups; trackBy: trackById">{{ googleMetricGroupOption.name }}</option>
+                      </select>
+                  </div>
+            </div>
+        </form>
 
+    </div>
     <div class="table-responsive" id="entities" *ngIf="googleMetrics?.length > 0">
         <table class="table table-striped" aria-describedby="page-heading">
             <thead>

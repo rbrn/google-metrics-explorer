@@ -12,7 +12,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link GoogleMetric}.
@@ -80,5 +82,12 @@ public class GoogleMetricServiceImpl implements GoogleMetricService {
     public void delete(String id) {
         log.debug("Request to delete GoogleMetric : {}", id);
         googleMetricRepository.deleteById(id);
+    }
+
+    @Override
+    public List<GoogleMetricDTO> findByName(String groupName) {
+        return googleMetricRepository.findAllByMetricGroupId(groupName)
+            .stream()
+            .map(googleMetricMapper::toDto).collect(Collectors.toList());
     }
 }

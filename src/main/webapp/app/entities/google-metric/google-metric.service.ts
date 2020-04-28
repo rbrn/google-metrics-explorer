@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { SERVER_API_URL } from 'app/app.constants';
 import { createRequestOption } from 'app/shared/util/request-util';
 import { IGoogleMetric } from 'app/shared/model/google-metric.model';
+import { IGoogleMetricGroup } from 'app/shared/model/google-metric-group.model';
 
 type EntityResponseType = HttpResponse<IGoogleMetric>;
 type EntityArrayResponseType = HttpResponse<IGoogleMetric[]>;
@@ -25,6 +26,10 @@ export class GoogleMetricService {
 
   find(id: string): Observable<EntityResponseType> {
     return this.http.get<IGoogleMetric>(`${this.resourceUrl}/${id}`, { observe: 'response' });
+  }
+
+  findByGroup(groupName: string): Observable<EntityArrayResponseType> {
+    return this.http.get<IGoogleMetric[]>(`${this.resourceUrl}/by-group/${groupName}`, { observe: 'response' });
   }
 
   query(req?: any): Observable<EntityArrayResponseType> {
