@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IGoogleMetric } from 'app/shared/model/google-metric.model';
+import { ChartWrapper, IGoogleMetric } from 'app/shared/model/google-metric.model';
 
 @Component({
   selector: 'jhi-google-metric-detail',
@@ -22,14 +22,23 @@ export class GoogleMetricDetailComponent implements OnInit {
   width = 550;
   height = 400;
   type = 'LineChart';
-  data: any;
+  data: ChartWrapper[];
 
-  constructor(protected activatedRoute: ActivatedRoute) {}
+  constructor(protected activatedRoute: ActivatedRoute) {
+    this.data = [];
+  }
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(
       ({ googleMetric }) => (
-        (this.googleMetric = googleMetric), (this.data = this.googleMetric?.data?.map(value => [value.startTimeHoursMinutes, value.value]))
+        (this.googleMetric = googleMetric),
+        this.googleMetric?.data?.forEach(values => {
+          if (values != null && values.timeSeriesPoints != null) {
+            const datapoints = values.timeSeriesPoints.map(value => [value.startTimeHoursMinutes, value.value]);
+            const wrapper = new ChartWrapper(datapoints, values.labelsMap);
+            this.data.push(wrapper);
+          }
+        })
       )
     );
   }

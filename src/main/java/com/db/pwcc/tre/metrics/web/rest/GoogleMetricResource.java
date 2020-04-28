@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -126,7 +125,7 @@ public class GoogleMetricResource {
     public ResponseEntity<GoogleMetricDTO> getGoogleMetric(@PathVariable String id) throws IOException {
         log.debug("REST request to get GoogleMetric : {}", id);
         Optional<GoogleMetricDTO> googleMetricDTO = googleMetricService.findOne(id);
-        googleMetricDTO.get().setData( googleMetricCustomService.listTimeSeriesAggregrate(googleMetricDTO));
+        googleMetricDTO.get().setData( googleMetricCustomService.listTimeSeriesAggregate(googleMetricDTO));
         return ResponseUtil.wrapOrNotFound(googleMetricDTO);
     }
 

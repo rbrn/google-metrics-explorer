@@ -1,6 +1,7 @@
 package com.db.pwcc.tre.metrics.service.dto;
 
 import com.db.pwcc.tre.metrics.web.rest.TimeSeriesPoint;
+import com.db.pwcc.tre.metrics.web.rest.TimeSeriesWrapper;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
@@ -23,7 +24,7 @@ public class GoogleMetricDTO implements Serializable {
     private String metricGroupId;
 
     private String metricGroupName;
-    private List<TimeSeriesPoint> data;
+    private List<TimeSeriesWrapper> data;
 
     public String getId() {
         return id;
@@ -97,11 +98,11 @@ public class GoogleMetricDTO implements Serializable {
             "}";
     }
 
-    public void setData(List<TimeSeriesPoint> data) {
+    public void setData(List<TimeSeriesWrapper> data) {
         this.data = data;
     }
 
-    public List<TimeSeriesPoint> getData() {
+    public List<TimeSeriesWrapper> getData() {
         return data;
     }
 }

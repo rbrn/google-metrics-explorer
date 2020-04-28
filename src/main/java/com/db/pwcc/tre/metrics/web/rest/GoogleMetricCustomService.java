@@ -5,6 +5,8 @@ import com.google.cloud.monitoring.v3.MetricServiceClient;
 import com.google.monitoring.v3.*;
 import com.google.protobuf.Duration;
 import com.google.protobuf.util.Timestamps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -20,6 +22,7 @@ import static java.util.stream.Collectors.toList;
 @Component
 public class GoogleMetricCustomService {
 
+    Logger logger = LoggerFactory.getLogger(GoogleMetricCustomService.class);
 
     /**
      * Demonstrates listing time series and aggregating them.
@@ -27,14 +30,14 @@ public class GoogleMetricCustomService {
      * @param googleMetricDTO
      * @return
      */
-    public List<TimeSeriesPoint> listTimeSeriesAggregrate(Optional<GoogleMetricDTO> googleMetricDTO) throws IOException {
+    public List<TimeSeriesWrapper> listTimeSeriesAggregate(Optional<GoogleMetricDTO> googleMetricDTO) throws IOException {
         // [START monitoring_read_timeseries_align]
         MetricServiceClient metricServiceClient = MetricServiceClient.create();
         String projectId = "dev1-onb-dbhc-monitoring-e561";
         ProjectName name = ProjectName.of(projectId);
 
         // Restrict time to last 20 minutes
-        long startMillis = System.currentTimeMillis() - ((60 * 20) * 1000);
+        long startMillis = System.currentTimeMillis() - ((60 * 120) * 1000);
         TimeInterval interval =
             TimeInterval.newBuilder()
                 .setStartTime(Timestamps.fromMillis(startMillis))
@@ -57,18 +60,19 @@ public class GoogleMetricCustomService {
 
         MetricServiceClient.ListTimeSeriesPagedResponse response = metricServiceClient.listTimeSeries(request);
 
-        System.out.println("Got timeseries: ");
-        List<List<TimeSeriesPoint>> timeSeries = new ArrayList<>();
+
+        List<TimeSeriesWrapper> timeSeries = new ArrayList<>();
         for (TimeSeries ts : response.iterateAll()) {
             System.out.println(ts.toString());
-            timeSeries.add(ts.getPointsList().stream().map(
+            List<TimeSeriesPoint> timeSeriesPoints = ts.getPointsList().stream().map(
                 this::mapFromPoint
-            ).collect(toList()));
+            ).collect(toList());
+            timeSeries.add(   new TimeSeriesWrapper(timeSeriesPoints, ts.getMetric().getLabelsMap()));
         }
 
-
+        logger.info("Got {} timeseries", timeSeries.size());
         // [END monitoring_read_timeseries_align]
-        return timeSeries.size() > 0 ? timeSeries.get(0) : new ArrayList<>();
+        return timeSeries;
     }
 
     private <R> TimeSeriesPoint mapFromPoint(Point point) {
